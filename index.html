@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SOP MESIN CNC TEKNIK MESIN POLSRI</title>
+
+  <!-- FONT -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- ICON -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Poppins',sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      overflow-x:hidden;
+
+      background:
+      radial-gradient(circle at top left,#1d4ed8 0%,transparent 30%),
+      radial-gradient(circle at bottom right,#06b6d4 0%,transparent 30%),
+      linear-gradient(135deg,#020617,#0f172a,#111827);
+
+      color:white;
+      padding:30px;
+    }
+
+    /* =========================
+       LOADING SCREEN
+    ========================== */
+
+    #loadingScreen{
+      position:fixed;
+      width:100%;
+      height:100%;
+      background:#020617;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      z-index:999999;
+      animation:fadeOut 1s ease forwards;
+      animation-delay:3.5s;
+    }
+
+    .loader{
+      width:140px;
+      height:140px;
+      border-radius:50%;
+      border:7px solid rgba(255,255,255,0.08);
+      border-top:7px solid #38bdf8;
+      animation:spin 1s linear infinite;
+      box-shadow:0 0 50px #38bdf8;
+      margin-bottom:30px;
+    }
+
+    .loading-title{
+      font-size:28px;
+      font-weight:800;
+      letter-spacing:2px;
+      margin-bottom:10px;
+    }
+
+    .loading-sub{
+      color:#94a3b8;
+      letter-spacing:1px;
+    }
+
+    @keyframes spin{
+      100%{
+        transform:rotate(360deg);
+      }
+    }
+
+    @keyframes fadeOut{
+      to{
+        opacity:0;
+        visibility:hidden;
+      }
+    }
+
+    /* =========================
+       BACKGROUND GLOW
+    ========================== */
+
+    .glow1,
+    .glow2{
+      position:fixed;
+      border-radius:50%;
+      filter:blur(120px);
+      z-index:-1;
+    }
+
+    .glow1{
+      width:350px;
+      height:350px;
+      background:#2563eb;
+      top:-100px;
+      left:-100px;
+    }
+
+    .glow2{
+      width:350px;
+      height:350px;
+      background:#06b6d4;
+      bottom:-100px;
+      right:-100px;
+    }
+
+    /* =========================
+       HEADER
+    ========================== */
+
+    .header{
+      margin-bottom:70px;
+      animation:slideDown 1s ease;
+    }
+
+    .header-top{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:40px;
+      flex-wrap:wrap;
+    }
+
+    .header-text{
+      text-align:center;
+    }
+
+    .logo-box img{
+
+      width:140px;
+      height:140px;
+
+      object-fit:contain;
+
+      background:white;
+
+      padding:12px;
+
+      border-radius:30px;
+
+      box-shadow:
+      0 10px 30px rgba(0,0,0,0.4),
+      0 0 40px rgba(56,189,248,0.35);
+
+      transition:0.5s;
+    }
+
+    .logo-box img:hover{
+
+      transform:translateY(-8px) scale(1.05);
+
+      box-shadow:
+      0 20px 45px rgba(56,189,248,0.5);
+    }
+
+    @keyframes slideDown{
+      from{
+        opacity:0;
+        transform:translateY(-40px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    .title{
+
+      font-size:56px;
+      font-weight:800;
+      line-height:1.1;
+
+      background:linear-gradient(to right,#38bdf8,#ffffff);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+
+      margin-bottom:15px;
+    }
+
+    .subtitle{
+      color:#cbd5e1;
+      font-size:18px;
+      letter-spacing:1px;
+    }
+
+    /* =========================
+       GRID CARD
+    ========================== */
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      gap:35px;
+    }
+
+    .card{
+
+      position:relative;
+
+      background:rgba(255,255,255,0.06);
+      backdrop-filter:blur(18px);
+
+      border:1px solid rgba(255,255,255,0.08);
+
+      border-radius:30px;
+
+      padding:35px;
+
+      overflow:hidden;
+
+      transition:0.5s;
+
+      box-shadow:
+      0 10px 40px rgba(0,0,0,0.35);
+
+      animation:fadeUp 1s ease;
+    }
+
+    @keyframes fadeUp{
+      from{
+        opacity:0;
+        transform:translateY(50px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    .card:hover{
+
+      transform:translateY(-10px) scale(1.02);
+
+      border:1px solid rgba(56,189,248,0.5);
+
+      box-shadow:
+      0 20px 60px rgba(56,189,248,0.25);
+    }
+
+    .card::before{
+      content:'';
+      position:absolute;
+      width:180px;
+      height:180px;
+      background:rgba(56,189,248,0.12);
+      border-radius:50%;
+      top:-80px;
+      right:-80px;
+    }
+
+    .icon{
+
+      width:90px;
+      height:90px;
+
+      display:flex;
+      justify-content:center;
+      align-items:center;
+
+      border-radius:25px;
+
+      background:linear-gradient(135deg,#38bdf8,#2563eb);
+
+      font-size:40px;
+
+      margin-bottom:25px;
+
+      box-shadow:
+      0 10px 30px rgba(37,99,235,0.4);
+    }
+
+    .machine-title{
+      font-size:24px;
+      font-weight:700;
+      margin-bottom:15px;
+      line-height:1.3;
+    }
+
+    .machine-desc{
+      color:#cbd5e1;
+      font-size:15px;
+      line-height:1.7;
+      margin-bottom:30px;
+    }
+
+    /* =========================
+       BUTTONS
+    ========================== */
+
+    .button-group{
+      display:flex;
+      gap:15px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+
+      flex:1;
+
+      padding:15px 20px;
+
+      border:none;
+      border-radius:18px;
+
+      cursor:pointer;
+
+      font-size:15px;
+      font-weight:600;
+
+      transition:0.4s;
+
+      text-decoration:none;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+    }
+
+    .btn-view{
+
+      background:linear-gradient(135deg,#38bdf8,#2563eb);
+      color:white;
+
+      box-shadow:
+      0 10px 25px rgba(37,99,235,0.35);
+    }
+
+    .btn-view:hover{
+      transform:translateY(-3px);
+      box-shadow:
+      0 15px 35px rgba(56,189,248,0.5);
+    }
+
+    .btn-download{
+
+      background:rgba(255,255,255,0.08);
+      color:white;
+      border:1px solid rgba(255,255,255,0.1);
+    }
+
+    .btn-download:hover{
+      background:rgba(255,255,255,0.15);
+      transform:translateY(-3px);
+    }
+
+    /* =========================
+       MODAL PDF
+    ========================== */
+
+    .modal{
+
+      position:fixed;
+      top:0;
+      left:0;
+
+      width:100%;
+      height:100%;
+
+      background:rgba(0,0,0,0.78);
+
+      display:none;
+      justify-content:center;
+      align-items:center;
+
+      z-index:99999;
+
+      padding:20px;
+    }
+
+    .modal-content{
+
+      width:95%;
+      height:95%;
+
+      background:#0f172a;
+
+      border-radius:25px;
+
+      overflow:hidden;
+
+      position:relative;
+
+      border:1px solid rgba(255,255,255,0.08);
+
+      box-shadow:
+      0 20px 60px rgba(0,0,0,0.6);
+    }
+
+    .close-btn{
+
+      position:absolute;
+      top:15px;
+      right:20px;
+
+      width:45px;
+      height:45px;
+
+      border:none;
+      border-radius:50%;
+
+      background:#ef4444;
+
+      color:white;
+
+      cursor:pointer;
+
+      font-size:20px;
+      z-index:999;
+    }
+
+    iframe{
+      width:100%;
+      height:100%;
+      border:none;
+    }
+
+    /* =========================
+       FOOTER
+    ========================== */
+
+    .footer{
+      margin-top:80px;
+      text-align:center;
+      color:#94a3b8;
+      font-size:14px;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
+
+    @media(max-width:768px){
+
+      body{
+        padding:20px;
+      }
+
+      .title{
+        font-size:34px;
+      }
+
+      .subtitle{
+        font-size:14px;
+      }
+
+      .card{
+        padding:28px;
+      }
+
+      .machine-title{
+        font-size:21px;
+      }
+
+      .button-group{
+        flex-direction:column;
+      }
+
+      .logo-box img{
+        width:100px;
+        height:100px;
+      }
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<!-- LOADING -->
+
+<div id="loadingScreen">
+
+  <div class="loader"></div>
+
+  <div class="loading-title">
+    CNC SOP SYSTEM
+  </div>
+
+  <div class="loading-sub">
+    TEKNIK MESIN POLSRI
+  </div>
+
+</div>
+
+<!-- BACKGROUND -->
+
+<div class="glow1"></div>
+<div class="glow2"></div>
+
+<!-- HEADER -->
+
+<div class="header">
+
+  <div class="header-top">
+
+    <!-- LOGO POLSRI -->
+
+    <div class="logo-box">
+
+      <img src="https://drive.google.com/thumbnail?id=1EWgGKHiApLYFxnqZlHLS747h4LdOxg4z&sz=w1000">
+
+    </div>
+
+    <!-- TITLE -->
+
+    <div class="header-text">
+
+      <div class="title">
+        SOP MESIN CNC<br>
+        TEKNIK MESIN POLSRI
+      </div>
+
+      <div class="subtitle">
+        Standard Operating Procedure • Laboratorium CNC Teknik Mesin
+      </div>
+
+    </div>
+
+    <!-- LOGO MESIN -->
+
+    <div class="logo-box">
+
+      <img src="https://drive.google.com/thumbnail?id=1qiy0_Xzq4jyXktffyyCoEyW0b9C-mAgt&sz=w1000">
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- GRID -->
+
+<div class="grid">
+
+  <!-- CARD 1 -->
+
+  <div class="card">
+
+    <div class="icon">
+      <i class="fa-solid fa-gears"></i>
+    </div>
+
+    <div class="machine-title">
+      SOP CNC 3A EMCO VMC 750
+    </div>
+
+    <div class="machine-desc">
+      Standar operasional penggunaan mesin CNC EMCO VMC 750 untuk kegiatan praktikum, penelitian, dan manufaktur presisi.
+    </div>
+
+    <div class="button-group">
+
+      <button class="btn btn-view"
+      onclick="openPDF('https://drive.google.com/file/d/1VTLTvZJAOxDvj4fBrdDV7SvcdCgXtaP2/preview')">
+
+        <i class="fa-solid fa-eye"></i>
+        Lihat SOP
+
+      </button>
+
+      <a class="btn btn-download"
+      href="https://drive.google.com/uc?export=download&id=1VTLTvZJAOxDvj4fBrdDV7SvcdCgXtaP2"
+      target="_blank">
+
+        <i class="fa-solid fa-download"></i>
+        Download
+
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- CARD 2 -->
+
+  <div class="card">
+
+    <div class="icon">
+      <i class="fa-solid fa-microchip"></i>
+    </div>
+
+    <div class="machine-title">
+      SOP CNC 3A EMCO VMC 200
+    </div>
+
+    <div class="machine-desc">
+      Prosedur keselamatan dan langkah penggunaan mesin CNC EMCO VMC 200 untuk operasional laboratorium.
+    </div>
+
+    <div class="button-group">
+
+      <button class="btn btn-view"
+      onclick="openPDF('https://drive.google.com/file/d/1J-KmndA4n5s6XZuGlz6aXrIfpViJOCkh/preview')">
+
+        <i class="fa-solid fa-eye"></i>
+        Lihat SOP
+
+      </button>
+
+      <a class="btn btn-download"
+      href="https://drive.google.com/uc?export=download&id=1J-KmndA4n5s6XZuGlz6aXrIfpViJOCkh"
+      target="_blank">
+
+        <i class="fa-solid fa-download"></i>
+        Download
+
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- CARD 3 -->
+
+  <div class="card">
+
+    <div class="icon">
+      <i class="fa-solid fa-industry"></i>
+    </div>
+
+    <div class="machine-title">
+      SOP CNC 2A EMCO VMC 242
+    </div>
+
+    <div class="machine-desc">
+      Dokumen SOP penggunaan CNC EMCO TURN 242 meliputi setup mesin, keselamatan operator, dan prosedur kerja.
+    </div>
+
+    <div class="button-group">
+
+      <button class="btn btn-view"
+      onclick="openPDF('https://drive.google.com/file/d/15D8KTU5mxOSvSIUbCvPt_zvXswhe-tE8/preview')">
+
+        <i class="fa-solid fa-eye"></i>
+        Lihat SOP
+
+      </button>
+
+      <a class="btn btn-download"
+      href="https://drive.google.com/uc?export=download&id=15D8KTU5mxOSvSIUbCvPt_zvXswhe-tE8"
+      target="_blank">
+
+        <i class="fa-solid fa-download"></i>
+        Download
+
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- CARD 4 -->
+
+  <div class="card">
+
+    <div class="icon">
+      <i class="fa-solid fa-screwdriver-wrench"></i>
+    </div>
+
+    <div class="machine-title">
+      SOP CNC 2A EMCO VMC 120
+    </div>
+
+    <div class="machine-desc">
+      Panduan operasional dan keselamatan penggunaan mesin CNC EMCO TURN 120 pada laboratorium CNC POLSRI.
+    </div>
+
+    <div class="button-group">
+
+      <button class="btn btn-view"
+      onclick="openPDF('https://drive.google.com/file/d/1fJYr2cXl_lEBrnXvYa6h7sgXaBGpdaZ4/preview')">
+
+        <i class="fa-solid fa-eye"></i>
+        Lihat SOP
+
+      </button>
+
+      <a class="btn btn-download"
+      href="https://drive.google.com/uc?export=download&id=1fJYr2cXl_lEBrnXvYa6h7sgXaBGpdaZ4"
+      target="_blank">
+
+        <i class="fa-solid fa-download"></i>
+        Download
+
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- CARD 5 -->
+
+  <div class="card">
+
+    <div class="icon">
+      <i class="fa-solid fa-fire"></i>
+    </div>
+
+    <div class="machine-title">
+      SOP CNC LASER CUTTING
+    </div>
+
+    <div class="machine-desc">
+      SOP penggunaan mesin laser cutting termasuk prosedur keamanan, pengaturan material, dan pengoperasian mesin.
+    </div>
+
+    <div class="button-group">
+
+      <button class="btn btn-view"
+      onclick="openPDF('https://drive.google.com/file/d/1CLT54u3VTXQ9qW2U2hlzbKlJJOdxGbhh/preview')">
+
+        <i class="fa-solid fa-eye"></i>
+        Lihat SOP
+
+      </button>
+
+      <a class="btn btn-download"
+      href="https://drive.google.com/uc?export=download&id=1CLT54u3VTXQ9qW2U2hlzbKlJJOdxGbhh"
+      target="_blank">
+
+        <i class="fa-solid fa-download"></i>
+        Download
+
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MODAL PDF -->
+
+<div class="modal" id="pdfModal">
+
+  <div class="modal-content">
+
+    <button class="close-btn" onclick="closePDF()">
+      ✕
+    </button>
+
+    <iframe id="pdfFrame"></iframe>
+
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+
+<div class="footer">
+  © 2026 SOP MESIN CNC • TEKNIK MESIN POLSRI
+</div>
+
+<script>
+
+  // =========================
+  // OPEN PDF
+  // =========================
+
+  function openPDF(link){
+
+    document.getElementById("pdfModal").style.display = "flex";
+
+    document.getElementById("pdfFrame").src = link;
+  }
+
+  // =========================
+  // CLOSE PDF
+  // =========================
+
+  function closePDF(){
+
+    document.getElementById("pdfModal").style.display = "none";
+
+    document.getElementById("pdfFrame").src = "";
+  }
+
+  // =========================
+  // CLICK OUTSIDE CLOSE
+  // =========================
+
+  window.onclick = function(event){
+
+    const modal = document.getElementById("pdfModal");
+
+    if(event.target == modal){
+
+      closePDF();
+    }
+  }
+
+</script>
+
+</body>
+</html>
